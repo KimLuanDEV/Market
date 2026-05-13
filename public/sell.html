@@ -23,7 +23,12 @@
 const uid = localStorage.getItem("uid");
 
 function showMsg(t){
-  document.getElementById("msg").textContent = t;
+
+  const msgEl = document.getElementById("msg");
+
+  if(!msgEl) return;
+
+  msgEl.textContent = t;
 }
 
 async function createProduct(){

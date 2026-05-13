@@ -20,27 +20,58 @@
 </div>
 
 <script>
+const uid = localStorage.getItem("uid");
+
+function showMsg(t){
+  document.getElementById("msg").textContent = t;
+}
+
 async function createProduct(){
+  if(!uid){
+    showMsg("❌ Bạn cần đăng nhập để đăng bán");
+    return;
+  }
+
+  const nameEl = document.getElementById("name");
+  const priceEl = document.getElementById("price");
+  const imageEl = document.getElementById("image");
+  const categoryEl = document.getElementById("category");
+  const descriptionEl = document.getElementById("description");
+
   const body = {
-    name: name.value.trim(),
-    price: price.value,
-    stock: stock.value,
-    image: image.value.trim(),
-    description: description.value.trim()
+    name: nameEl.value.trim(),
+    price: Number(priceEl.value || 0),
+    image: imageEl.value.trim(),
+    category: categoryEl.value.trim(),
+    description: descriptionEl.value.trim()
   };
+
+  if(!body.name || body.price <= 0){
+    showMsg("❌ Nhập tên và giá sản phẩm hợp lệ");
+    return;
+  }
 
   const res = await fetch("/api/product/create", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      uid
+    },
     body: JSON.stringify(body)
   });
 
   const data = await res.json();
 
-  if(data.ok){
-    alert("Đăng sản phẩm thành công");
-    location.href = "/market.html";
+  if(data.error){
+    showMsg("❌ " + data.error);
+    return;
   }
+
+  showMsg("✅ Đăng bán thành công");
+
+  setTimeout(() => {
+    location.href = "/market.html";
+  }, 800);
 }
 </script>
 

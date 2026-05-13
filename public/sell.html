@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Đăng bán</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<div class="form-box">
+  <h2>Đăng sản phẩm</h2>
+
+  <input id="name" placeholder="Tên sản phẩm">
+  <input id="price" type="number" placeholder="Giá kim cương">
+  <input id="stock" type="number" placeholder="Số lượng">
+  <input id="image" placeholder="Link ảnh sản phẩm">
+  <textarea id="description" placeholder="Mô tả sản phẩm"></textarea>
+
+  <button onclick="createProduct()">Đăng bán</button>
+</div>
+
+<script>
+async function createProduct(){
+  const body = {
+    name: name.value.trim(),
+    price: price.value,
+    stock: stock.value,
+    image: image.value.trim(),
+    description: description.value.trim()
+  };
+
+  const res = await fetch("/api/product/create", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body)
+  });
+
+  const data = await res.json();
+
+  if(data.ok){
+    alert("Đăng sản phẩm thành công");
+    location.href = "/market.html";
+  }
+}
+</script>
+
+</body>
+</html>

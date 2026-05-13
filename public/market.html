@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>LivePro Market</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div>
+    <h1>LivePro Market</h1>
+    <p>Mua bán sản phẩm realtime</p>
+  </div>
+  <button onclick="location.href='/sell.html'">+ Đăng bán</button>
+</header>
+
+<main class="grid" id="productGrid"></main>
+
+<script>
+async function loadProducts(){
+  const res = await fetch("/api/products");
+  const products = await res.json();
+
+  productGrid.innerHTML = products.map(p => `
+    <div class="card" onclick="location.href='/product-detail.html?id=${p.id}'">
+      <img src="${p.image || 'https://via.placeholder.com/300'}">
+      <h3>${p.name}</h3>
+      <div class="price">${p.price.toLocaleString()} 💎</div>
+      <p>Còn lại: ${p.stock}</p>
+    </div>
+  `).join("");
+}
+
+loadProducts();
+</script>
+
+</body>
+</html>
